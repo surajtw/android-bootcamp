@@ -30,13 +30,15 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: Movie = movieList.get(position);
         holder.movieNameTextView?.text = movie.name;
+        holder.movieRating?.text = movie.rating.toString()
+        holder.movieImageView?.setImageResource( com.google.android.material.R.drawable.ic_keyboard_black_24dp)
         holder.itemView.setOnClickListener {
             Toast.makeText(context, movieList.get(position).name, Toast.LENGTH_SHORT).show()
         }
 
         class PicassoHandler(): Callback {
             override fun onSuccess() {
-                TODO("Not yet implemented")
+                Log.d("Image loded","")
             }
 
             override fun onError(e: Exception?) {
@@ -44,17 +46,18 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
             }
         }
 
-        Picasso.
-            get()
-            .load(movie.image)
-            .error( R.drawable.ic_launcher_foreground )
-            .placeholder(R.drawable.ic_launcher_background)
-            .into(holder.movieImageView, PicassoHandler());
+//        Picasso.
+//            get()
+//            .load(movie.image)
+//            .error( R.drawable.ic_launcher_foreground )
+//            .placeholder(R.drawable.ic_launcher_background)
+//            .into(holder.movieImageView, PicassoHandler());
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieNameTextView = view.findViewById<TextView>(R.id.movie_name);
         val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
+        val movieRating = view.findViewById<TextView>(R.id.movie_rating)
     }
 
 

@@ -36,7 +36,7 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
 
         class PicassoHandler(): Callback {
             override fun onSuccess() {
-                TODO("Not yet implemented")
+                Log.d("Image loaded", "");
             }
 
             override fun onError(e: Exception?) {

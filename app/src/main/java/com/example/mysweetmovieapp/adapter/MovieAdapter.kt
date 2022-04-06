@@ -1,5 +1,6 @@
 package com.example.mysweetmovieapp.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mysweetmovieapp.MovieDetail
 import com.example.mysweetmovieapp.MovieListActivity
 import com.example.mysweetmovieapp.R
 import com.example.mysweetmovieapp.model.Movie
@@ -29,7 +31,10 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
         val movie: Movie = movieList[position];
         holder.movieNameTextView?.text = movie.content.title;
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, MovieDetail::class.java);
+            intent.putExtra("movie", movie);
+            context.startActivity(intent);
         }
 
         class PicassoHandler(): Callback {

@@ -1,5 +1,6 @@
 package com.example.mysweetmovieapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,11 +22,15 @@ class MovieListActivity : AppCompatActivity(), DataSourceUpdate {
         setContentView(R.layout.activity_movie_list)
 
         dataSource.setObserver(this)
+
         val movieRV = findViewById<RecyclerView>(R.id.movie_list_view);
         layoutManager = LinearLayoutManager(this)
         movieRV.layoutManager = layoutManager
         movieRecyclerViewAdapter = MovieAdapter(this, dataSource.remoteMovies as ArrayList<Movie>);
         movieRV.adapter = movieRecyclerViewAdapter
+
+        val intent = Intent(this, MovieDetail::class.java)
+
     }
 
     override fun remoteMovieListUpdated(remoteMovies: List<Movie>) {

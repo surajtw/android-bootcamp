@@ -1,51 +1,45 @@
 package com.example.mysweetmovieapp.repository;
 
+import android.util.Log;
+
+import com.example.mysweetmovieapp.api.Api;
 import com.example.mysweetmovieapp.model.Movie;
+import com.example.mysweetmovieapp.model.ServerResponse;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DataSource {
     private static DataSource instance = null;
-    private List<Movie> localMovies = new ArrayList<Movie>();
+    private List<Movie> remoteMovies = new ArrayList<Movie>();
+    private DataSourceUpdate observer = null;
 
-    private DataSource() {
-        Movie shawShankRedemption =
-                new Movie(1, "The Shawshank Redemption",
-                        "http://i.imgur.com/DvpvklR.png", 9.2f);
+    public List<Movie> getRemoteMovies() {
+        Call<ServerResponse> movies = Api.Companion.create().getMovies();
 
-        Movie lotr =
-                new Movie(2, "The Lord of the Rings: The Return of the King ",
-                        "https://i.imgur.com/DvpvklR.png", 8.9f);
+        movies.enqueue(new Callback<ServerResponse>() {
+            @Override
+            public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
+                Log.e("Response", "${response.body()} = " + response.body());
+                remoteMovies = response.body().getData().getCards();
+                if(observer != null) {
+                    observer.remoteMovieListUpdated(remoteMovies);
+                }
 
-        Movie inception  =
-                new Movie(3, "Inception ",
-                        "https://i.imgur.com/DvpvklR.png", 9.2f);
+            }
 
-        Movie interstellar =
-                new Movie(4, "Interstellar",
-                        "https://i.imgur.com/DvpvklR.png", 9.2f);
-
-
-        localMovies.add(shawShankRedemption);
-        localMovies.add(lotr);
-        localMovies.add(inception);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-        localMovies.add(interstellar);
-
-    }
-
-    public List<Movie> getLocalMovies() {
-        return localMovies;
+            @Override
+            public void onFailure(Call<ServerResponse> call, Throwable t) {
+                Log.e("Response", "Failed to load data " + t.getMessage());
+            }
+        });
+        return remoteMovies;
     }
 
     public static DataSource getInstance() {
@@ -53,5 +47,9 @@ public class DataSource {
             instance = new DataSource();
         }
         return instance;
+    }
+
+    public void setObserver(@NotNull DataSourceUpdate observer) {
+        this.observer = observer;
     }
 }

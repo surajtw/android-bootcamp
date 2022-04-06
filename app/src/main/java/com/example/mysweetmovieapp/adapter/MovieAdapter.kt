@@ -1,6 +1,5 @@
 package com.example.mysweetmovieapp.adapter
 
-import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +14,8 @@ import com.example.mysweetmovieapp.model.Movie
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
-import java.net.URL
 
-class MovieAdapter(private val context: MovieListActivity, private val movieList: ArrayList<Movie>) :
+class MovieAdapter(private val context: MovieListActivity, private var movieList: ArrayList<Movie>) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.movie_list_jtem, parent, false))
@@ -28,10 +26,10 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie: Movie = movieList.get(position);
-        holder.movieNameTextView?.text = movie.name;
+        val movie: Movie = movieList[position];
+        holder.movieNameTextView?.text = movie.content.title;
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, movieList.get(position).name, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
         }
 
         class PicassoHandler(): Callback {
@@ -46,7 +44,7 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
 
         Picasso.
             get()
-            .load(movie.image)
+            .load(movie.content.movie_logo)
             .error( R.drawable.ic_launcher_foreground )
             .placeholder(R.drawable.ic_launcher_background)
             .into(holder.movieImageView, PicassoHandler());
@@ -57,5 +55,9 @@ class MovieAdapter(private val context: MovieListActivity, private val movieList
         val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
     }
 
+    fun setMovieListItems(movieList: List<Movie>){
+        this.movieList = movieList as ArrayList<Movie>
+        notifyDataSetChanged()
+    }
 
 }

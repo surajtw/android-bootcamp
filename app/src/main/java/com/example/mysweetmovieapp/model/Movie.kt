@@ -1,15 +1,7 @@
 package com.example.mysweetmovieapp.model
 
-data class Movie(val id: Int) {
-    var name: String = ""
-    var image: String = ""
-    var rating: Float = 0.0F
+data class ServerResponse (val data: Data) {}
+data class Data(var cards: List<Movie>) {}
+data class Movie(var content: MovieMetaData) {}
+data class MovieMetaData(var title: String, var movie_logo: String) {}
 
-    constructor(id: Int, name: String, image: String, rating: Float) : this(id) {
-        this.name = name;
-        this.image = image;
-        this.rating = rating;
-    }
-
-    constructor() : this(0)
-}

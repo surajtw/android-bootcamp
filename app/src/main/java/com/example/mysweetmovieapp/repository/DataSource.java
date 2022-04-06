@@ -12,7 +12,7 @@ public class DataSource {
     private DataSource() {
         Movie shawShankRedemption =
                 new Movie(1, "The Shawshank Redemption",
-                        "http://i.imgur.com/DvpvklR.png", 9.2f);
+                        "http://i.imgur.com/DvpvklRpng", 9.2f);
 
         Movie lotr =
                 new Movie(2, "The Lord of the Rings: The Return of the King ",

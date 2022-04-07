@@ -1,5 +1,6 @@
 package com.example.mysweetmovieapp.adapter
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,13 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mysweetmovieapp.MovieDetailActivity
 import com.example.mysweetmovieapp.MovieListActivity
 import com.example.mysweetmovieapp.R
 import com.example.mysweetmovieapp.model.Movie
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import java.lang.Exception
 
 class MovieAdapter(private val context: MovieListActivity, private var movieList: ArrayList<Movie>) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
@@ -28,10 +30,6 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: Movie = movieList[position];
         holder.movieNameTextView?.text = movie.content.title;
-        holder.itemView.setOnClickListener {
-            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
-        }
-
         class PicassoHandler(): Callback {
             override fun onSuccess() {
                 Log.d("Image loaded", "");
@@ -43,18 +41,27 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
         }
 
         Picasso.
-            get()
+        get()
             .load(movie.content.movie_logo)
             .error( R.drawable.ic_launcher_foreground )
             .placeholder(R.drawable.ic_launcher_background)
             .into(holder.movieImageView, PicassoHandler());
+        holder.itemView.setOnClickListener {
+        //  Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
+
+    val intent=Intent(context,MovieDetailActivity::class.java)
+            val m=movie.content.title
+            intent.putExtra("send",m)
+            startActivity(context,intent,null)
+        }
+
+
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieNameTextView = view.findViewById<TextView>(R.id.movie_name);
         val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
     }
-
     fun setMovieListItems(movieList: List<Movie>){
         this.movieList = movieList as ArrayList<Movie>
         notifyDataSetChanged()

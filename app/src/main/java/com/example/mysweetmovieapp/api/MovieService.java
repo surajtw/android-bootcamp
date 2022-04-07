@@ -1,12 +1,10 @@
-package com.example.mysweetmovieapp.repository;
+package com.example.mysweetmovieapp.api;
 
 import android.util.Log;
 
-import com.example.mysweetmovieapp.api.Api;
 import com.example.mysweetmovieapp.model.Movie;
 import com.example.mysweetmovieapp.model.ServerResponse;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.mysweetmovieapp.util.MovieListObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +13,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DataSource {
-    private static DataSource instance = null;
+public class MovieService {
     private List<Movie> remoteMovies = new ArrayList<Movie>();
-    private DataSourceUpdate observer = null;
-
+    private MovieListObserver movieListObserver;
     public List<Movie> getRemoteMovies() {
         Call<ServerResponse> movies = Api.Companion.create().getMovies();
 
@@ -28,10 +24,7 @@ public class DataSource {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 Log.e("Response", "${response.body()} = " + response.body());
                 remoteMovies = response.body().getData().getCards();
-                if(observer != null) {
-                    observer.remoteMovieListUpdated(remoteMovies);
-                }
-
+                movieListObserver.onMovieListFetched(remoteMovies);
             }
 
             @Override
@@ -42,14 +35,7 @@ public class DataSource {
         return remoteMovies;
     }
 
-    public static DataSource getInstance() {
-        if (instance == null) {
-            instance = new DataSource();
-        }
-        return instance;
-    }
-
-    public void setObserver(@NotNull DataSourceUpdate observer) {
-        this.observer = observer;
+    public void setMovieObserver(MovieListObserver movieListObserver) {
+        this.movieListObserver = movieListObserver;
     }
 }

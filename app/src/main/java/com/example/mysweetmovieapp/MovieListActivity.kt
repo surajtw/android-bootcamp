@@ -3,37 +3,72 @@ package com.example.mysweetmovieapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysweetmovieapp.adapter.MovieAdapter
 import com.example.mysweetmovieapp.model.Movie
-import com.example.mysweetmovieapp.repository.DataSource
-import com.example.mysweetmovieapp.repository.DataSourceUpdate
+import com.example.mysweetmovieapp.viewmodel.MovieListListViewModel
 
-class MovieListActivity : AppCompatActivity(), DataSourceUpdate {
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mysweetmovieapp.api.MovieService
+import com.example.mysweetmovieapp.repository.MovieListRepository
+import com.example.mysweetmovieapp.util.Status
+
+class MovieListActivity : AppCompatActivity() {
+    private val TAG = "MovieListActivity"
+
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var movieRecyclerViewAdapter: MovieAdapter
 
-    val dataSource = DataSource.getInstance()
-
+    private lateinit var movieViewModel: MovieListListViewModel;
+    private lateinit var movieListRepository: MovieListRepository;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
-
-        dataSource.setObserver(this)
-
+        setupViewModel();
+        setupObserver();
         val movieRV = findViewById<RecyclerView>(R.id.movie_list_view);
         layoutManager = LinearLayoutManager(this)
         movieRV.layoutManager = layoutManager
-        movieRecyclerViewAdapter = MovieAdapter(this, dataSource.remoteMovies as ArrayList<Movie>);
+        movieRecyclerViewAdapter = MovieAdapter(this, arrayListOf());
         movieRV.adapter = movieRecyclerViewAdapter
-
-        val intent = Intent(this, MovieDetail::class.java)
-
     }
 
-    override fun remoteMovieListUpdated(remoteMovies: List<Movie>) {
-        movieRecyclerViewAdapter.setMovieListItems(remoteMovies)
+
+    private fun setupObserver() {
+        movieViewModel.getMovies().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    Log.i(TAG, "Data loaded!");
+                    it.data?.let { movies -> updateList(movies) }
+                }
+                Status.LOADING -> {
+                    Log.i(TAG, "Data loading...");
+                }
+                else -> {
+                    Log.e(TAG, "${it.message}")
+                }
+            }
+        })
     }
+
+    private fun updateList(movies: List<Movie>) {
+        movieRecyclerViewAdapter.setMovieListItems(movies)
+    }
+
+    private fun setupViewModel() {
+        movieListRepository = MovieListRepository(MovieService());
+        movieViewModel = ViewModelProvider(this, ViewModelFactory(movieListRepository)). get(MovieListListViewModel::class.java)
+    }
+
+    private class ViewModelFactory(val movieListRepository: MovieListRepository): ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return MovieListListViewModel(movieListRepository) as T
+        }
+    }
+
 }

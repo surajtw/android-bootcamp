@@ -1,6 +1,5 @@
 package com.example.mysweetmovieapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mysweetmovieapp.adapter.MovieAdapter
 import com.example.mysweetmovieapp.model.Movie
-import com.example.mysweetmovieapp.viewmodel.MovieListListViewModel
+import com.example.mysweetmovieapp.viewmodel.MovieListViewModel
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysweetmovieapp.api.MovieService
@@ -23,7 +22,7 @@ class MovieListActivity : AppCompatActivity() {
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var movieRecyclerViewAdapter: MovieAdapter
 
-    private lateinit var movieViewModel: MovieListListViewModel;
+    private lateinit var movieViewModel: MovieListViewModel;
     private lateinit var movieListRepository: MovieListRepository;
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,12 +61,12 @@ class MovieListActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         movieListRepository = MovieListRepository(MovieService());
-        movieViewModel = ViewModelProvider(this, ViewModelFactory(movieListRepository)). get(MovieListListViewModel::class.java)
+        movieViewModel = ViewModelProvider(this, ViewModelFactory(movieListRepository)). get(MovieListViewModel::class.java)
     }
 
     private class ViewModelFactory(val movieListRepository: MovieListRepository): ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            return MovieListListViewModel(movieListRepository) as T
+            return MovieListViewModel(movieListRepository) as T
         }
     }
 

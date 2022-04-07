@@ -30,6 +30,7 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: Movie = movieList[position];
         holder.movieNameTextView?.text = movie.content.title;
+        holder.movieRatingTextview?.text=movie.content.rating
         holder.itemView.setOnClickListener {
 //            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
             val intent = Intent(context, MovieDetail::class.java);
@@ -58,6 +59,7 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieNameTextView = view.findViewById<TextView>(R.id.movie_name);
         val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
+        val movieRatingTextview = view.findViewById<TextView>(R.id.movie_rating);
     }
 
     fun setMovieListItems(movieList: List<Movie>){

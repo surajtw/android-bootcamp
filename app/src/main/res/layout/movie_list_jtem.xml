@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="10dp"
         android:text="4.5"
+        android:id="@+id/movie_rating"
         android:layout_gravity="center_vertical"
         android:layout_weight="1" />
 

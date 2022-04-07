@@ -1,15 +1,15 @@
 package com.example.mysweetmovieapp.model
 
-data class Movie(val id: Int) {
-    var name: String = ""
-    var image: String = ""
-    var rating: Float = 0.0F
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-    constructor(id: Int, name: String, image: String, rating: Float) : this(id) {
-        this.name = name;
-        this.image = image;
-        this.rating = rating;
-    }
+data class ServerResponse (val data: Data) {}
 
-    constructor() : this(0)
-}
+data class Data(var cards: List<Movie>) {}
+
+@Parcelize
+data class Movie(var content: MovieMetaData): Parcelable
+
+@Parcelize
+data class MovieMetaData(var title: String, var movie_logo: String): Parcelable
+

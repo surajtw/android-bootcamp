@@ -11,5 +11,5 @@ data class Data(var cards: List<Movie>) {}
 data class Movie(var content: MovieMetaData): Parcelable
 
 @Parcelize
-data class MovieMetaData(var title: String, var movie_logo: String): Parcelable
+data class MovieMetaData(var title: String, var movie_logo: String, var rating: Double): Parcelable
 

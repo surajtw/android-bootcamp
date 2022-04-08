@@ -19,15 +19,18 @@ class MovieListListViewModel (private val movieRepository: MovieListRepository):
     }
 
     private fun fetchMovies () {
+        Log.i(TAG, "fetchMovies");
         movies.postValue(Resource.loading(null));
         movieRepository.getMovies();
     }
 
     override fun onMovieListFetched(movieList: List<Movie>) {
+        Log.i(TAG, "onMovieListFetched");
         movies.postValue(Resource.success(movieList));
     }
 
     fun getMovies(): LiveData<Resource<List<Movie>>> {
+        Log.i(TAG, "getMovies in viewmodel");
         return movies
     }
 

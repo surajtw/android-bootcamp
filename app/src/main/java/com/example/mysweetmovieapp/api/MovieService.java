@@ -14,6 +14,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MovieService {
+
     private List<Movie> remoteMovies = new ArrayList<Movie>();
     private MovieListObserver movieListObserver;
     public List<Movie> getRemoteMovies() {
@@ -34,8 +35,9 @@ public class MovieService {
         });
         return remoteMovies;
     }
-
     public void setMovieObserver(MovieListObserver movieListObserver) {
         this.movieListObserver = movieListObserver;
+        Log.i("MovieService", "Repo get movies!");
     }
+
 }

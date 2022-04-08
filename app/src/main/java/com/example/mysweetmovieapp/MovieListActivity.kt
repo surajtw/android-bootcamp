@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysweetmovieapp.api.MovieService
 import com.example.mysweetmovieapp.repository.MovieListRepository
 import com.example.mysweetmovieapp.util.Status
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MovieListActivity : AppCompatActivity() {
     private val TAG = "MovieListActivity"
@@ -25,13 +31,17 @@ class MovieListActivity : AppCompatActivity() {
 
     private lateinit var movieViewModel: MovieListListViewModel;
     private lateinit var movieListRepository: MovieListRepository;
+    private lateinit var loadingTextView : TextView
+    private lateinit var movieRV : RecyclerView
+    val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
         setupViewModel();
         setupObserver();
-        val movieRV = findViewById<RecyclerView>(R.id.movie_list_view);
+        movieRV = findViewById<RecyclerView>(R.id.movie_list_view);
+        loadingTextView = findViewById(R.id.loading_text)
         layoutManager = LinearLayoutManager(this)
         movieRV.layoutManager = layoutManager
         movieRecyclerViewAdapter = MovieAdapter(this, arrayListOf());
@@ -43,8 +53,14 @@ class MovieListActivity : AppCompatActivity() {
         movieViewModel.getMovies().observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
+
                     Log.i(TAG, "Data loaded!");
                     it.data?.let { movies -> updateList(movies) }
+                    scope.launch {
+                        delay(2000L)
+                        loadingTextView.visibility = View.GONE
+                        movieRV.visibility = View.VISIBLE
+                    }
                 }
                 Status.LOADING -> {
                     Log.i(TAG, "Data loading...");

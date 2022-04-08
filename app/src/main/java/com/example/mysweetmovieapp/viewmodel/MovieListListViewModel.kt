@@ -24,6 +24,7 @@ class MovieListListViewModel (private val movieRepository: MovieListRepository):
     }
 
     override fun onMovieListFetched(movieList: List<Movie>) {
+        Log.d("from","View model fetch method")
         movies.postValue(Resource.success(movieList));
     }
 

@@ -30,6 +30,11 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie: Movie = movieList[position];
         holder.movieNameTextView?.text = movie.content.title;
+        var rating = movie.content.rating
+        val ratingMessage = getRatingMessage(rating)
+        holder.movieRating.text = ratingMessage
+
+
         holder.itemView.setOnClickListener {
 //            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
             val intent = Intent(context, MovieDetail::class.java);
@@ -55,9 +60,17 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
             .into(holder.movieImageView, PicassoHandler());
     }
 
+    private fun getRatingMessage(rating: Double): String {
+        if(rating >= 7)
+            return "Good"
+        else
+            return "Bad"
+    }
+
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val movieNameTextView = view.findViewById<TextView>(R.id.movie_name);
         val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
+        val movieRating = view.findViewById<TextView>(R.id.movie_rating)
     }
 
     fun setMovieListItems(movieList: List<Movie>){

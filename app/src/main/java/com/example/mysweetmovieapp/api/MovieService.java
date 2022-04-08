@@ -24,6 +24,7 @@ public class MovieService {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 Log.e("Response", "${response.body()} = " + response.body());
                 remoteMovies = response.body().getData().getCards();
+                Log.d("from","movieService");
                 movieListObserver.onMovieListFetched(remoteMovies);
             }
 

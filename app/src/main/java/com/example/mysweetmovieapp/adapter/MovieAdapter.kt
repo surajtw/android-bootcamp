@@ -15,10 +15,15 @@ import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.lang.Exception
 
-class MovieAdapter(private val context: MovieListActivity, private var movieList: ArrayList<Movie>) :
+class MovieAdapter(
+    private val context: MovieListActivity,
+    private var movieList: ArrayList<Movie>
+) :
     RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context).inflate(R.layout.movie_list_jtem, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(R.layout.movie_list_jtem, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -26,36 +31,37 @@ class MovieAdapter(private val context: MovieListActivity, private var movieList
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie: Movie = movieList[position];
-        holder.movieNameTextView?.text = movie.content.title;
+        val movie: Movie = movieList[position]
+        holder.movieNameTextView?.text = movie.content.title
+        holder.movieRatingView?.text = movie.content.rating
         holder.itemView.setOnClickListener {
-            Toast.makeText(context, movieList.get(position).content.title, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, movieList[position].content.title, Toast.LENGTH_SHORT).show()
         }
 
-        class PicassoHandler(): Callback {
+        class PicassoHandler : Callback {
             override fun onSuccess() {
-                Log.d("Image loaded", "");
+                Log.d("Image loaded", "")
             }
 
             override fun onError(e: Exception?) {
-                Log.e("Error loading image : ", e?.stackTraceToString() ?: "");
+                Log.e("Error loading image : ", e?.stackTraceToString() ?: "")
             }
         }
 
-        Picasso.
-            get()
+        Picasso.get()
             .load(movie.content.movie_logo)
-            .error( R.drawable.ic_launcher_foreground )
+            .error(R.drawable.ic_launcher_foreground)
             .placeholder(R.drawable.ic_launcher_background)
-            .into(holder.movieImageView, PicassoHandler());
+            .into(holder.movieImageView, PicassoHandler())
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val movieNameTextView = view.findViewById<TextView>(R.id.movie_name);
-        val movieImageView = view.findViewById<ImageView>(R.id.movie_image);
+        val movieNameTextView = view.findViewById<TextView>(R.id.movie_name)
+        val movieImageView = view.findViewById<ImageView>(R.id.movie_image)
+        val movieRatingView = view.findViewById<TextView>(R.id.movie_rating)
     }
 
-    fun setMovieListItems(movieList: List<Movie>){
+    fun setMovieListItems(movieList: List<Movie>) {
         this.movieList = movieList as ArrayList<Movie>
         notifyDataSetChanged()
     }

@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 class MainActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.Main)
 
-    val nameFlow: Flow<String> = flow{
+    val nameFlow: Flow<String> = flow {
         val nameList = arrayListOf("tom", "cat", "john")
         while (true) {
             for (name in nameList) {
@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         scope.launch {
             delay(3000L)
-            Toast.makeText(this@MainActivity, "in blocking code", Toast.LENGTH_SHORT).show() }
+            Toast.makeText(this@MainActivity, "in blocking code", Toast.LENGTH_SHORT).show()
+        }
 
 
 

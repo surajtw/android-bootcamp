@@ -14,7 +14,7 @@ interface Api {
 
         var BASE_URL = "https://tw-mobile-hiring.web.app/"
 
-        fun create() : Api {
+        fun create(): Api {
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)

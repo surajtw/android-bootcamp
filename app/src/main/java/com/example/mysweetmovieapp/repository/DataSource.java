@@ -28,7 +28,7 @@ public class DataSource {
             public void onResponse(Call<ServerResponse> call, Response<ServerResponse> response) {
                 Log.e("Response", "${response.body()} = " + response.body());
                 remoteMovies = response.body().getData().getCards();
-                if(observer != null) {
+                if (observer != null) {
                     observer.remoteMovieListUpdated(remoteMovies);
                 }
 

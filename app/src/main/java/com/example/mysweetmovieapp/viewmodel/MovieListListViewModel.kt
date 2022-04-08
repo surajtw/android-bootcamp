@@ -24,6 +24,15 @@ class MovieListListViewModel (private val movieRepository: MovieListRepository):
     }
 
     override fun onMovieListFetched(movieList: List<Movie>) {
+        for (movie in movieList){
+            var rating = movie.content.rating.toFloat();
+            if(rating >= 7){
+                movie.content.rating = "GOOD"
+            }
+            else{
+                movie.content.rating = "BAD"
+            }
+        }
         movies.postValue(Resource.success(movieList));
     }
 
